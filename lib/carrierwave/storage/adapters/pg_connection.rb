@@ -27,7 +27,11 @@ module CarrierWave
         end
 
         def delete
-          connection.lo_unlink(identifier)
+          begin
+            connection.lo_unlink(identifier)
+          rescue PG::Error
+            # Do nothing, just don't raise exception when "lo_unlink failed" for some reason
+          end
         end
 
         def file_length
